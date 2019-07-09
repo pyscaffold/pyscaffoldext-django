@@ -13,9 +13,11 @@ import os
 import shutil
 from os.path import join as join_path
 
-from .. import shell
-from ..api import Extension, helpers
-from ..warnings import UpdateNotSupported
+from pyscaffold.api import Extension, helpers
+from pyscaffold.shell import ShellCommand
+from pyscaffold.warnings import UpdateNotSupported
+
+django_admin = ShellCommand("django-admin.py")
 
 
 class Django(Extension):
@@ -83,13 +85,12 @@ def create_django_proj(struct, opts):
         return struct, opts
 
     try:
-        shell.django_admin('--version')
+        django_admin('--version')
     except Exception as e:
         raise DjangoAdminNotInstalled from e
 
     pretend = opts.get('pretend')
-    shell.django_admin('startproject', opts['project'],
-                       log=True, pretend=pretend)
+    django_admin('startproject', opts['project'], log=True, pretend=pretend)
     if not pretend:
         src_dir = join_path(opts['project'], 'src')
         os.mkdir(src_dir)

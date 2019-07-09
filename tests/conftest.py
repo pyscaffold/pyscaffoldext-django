@@ -7,14 +7,14 @@
     Read more about conftest.py under:
     https://pytest.org/latest/plugins.html
 """
-from __future__ import print_function, absolute_import, division
-
 import os
-import stat
 import shlex
+import stat
 from shutil import rmtree
 
 import pytest
+
+from pyscaffold.exceptions import ShellCommandException
 
 
 def set_writable(func, path, exc_info):
@@ -57,3 +57,13 @@ def venv_run(venv):
         return venv.run(args, **kwargs).strip()
 
     return _run
+
+
+@pytest.fixture
+def nodjango_admin_mock(monkeypatch):
+    def raise_error(*_):
+        raise ShellCommandException("No django_admin mock!")
+
+    monkeypatch.setattr('pyscaffoldext.django.extension.django_admin',
+                        raise_error)
+    yield
