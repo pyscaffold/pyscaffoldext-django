@@ -1,3 +1,16 @@
+.. image:: https://travis-ci.org/pyscaffold/pyscaffoldext-django.svg?branch=master
+    :alt: Travis
+    :target: https://travis-ci.org/pyscaffold/pyscaffoldext-django
+.. image:: https://readthedocs.org/projects/pyscaffoldext-django/badge/?version=latest
+    :alt: ReadTheDocs
+    :target: https://pyscaffoldext-django.readthedocs.io/
+.. image:: https://img.shields.io/coveralls/github/pyscaffold/pyscaffoldext-django/master.svg
+    :alt: Coveralls
+    :target: https://coveralls.io/r/pyscaffold/pyscaffoldext-django
+.. image:: https://img.shields.io/pypi/v/pyscaffoldext-django.svg
+    :alt: PyPI-Server
+    :target: https://pypi.org/project/pyscaffoldext-django/
+
 ====================
 pyscaffoldext-django
 ====================
