@@ -19,6 +19,12 @@ from pyscaffold.warnings import UpdateNotSupported
 
 django_admin = ShellCommand("django-admin.py")
 
+def replace_in_place(file_name, old_string, new_string):
+    with open(file_name, 'r') as f:
+        s = f.read()    
+    s = s.replace(old_string, new_string)
+    with open(file_name, 'w') as f:
+        f.write(s)
 
 class Django(Extension):
     """Generate Django project files"""
@@ -46,6 +52,10 @@ class Django(Extension):
             actions, create_django_proj, before="apply_update_rules"
         )
 
+        actions = helpers.register(
+            actions, fix_django_settings, before="apply_update_rules"
+        )
+
         return actions
 
 
@@ -67,6 +77,17 @@ def enforce_django_options(struct, opts):
 
     return struct, opts
 
+def fix_django_settings(struct, opts):
+    old_string = f"'{opts['project']}"
+    new_string = f"'src.{opts['project']}"
+    src_dir = join_path(opts["project"], "src")
+    config_dir = join_path(src_dir, opts["project"])
+
+    replace_in_place(join_path(config_dir, 'settings.py'), old_string, new_string)
+    replace_in_place(join_path(config_dir, 'wsgi.py'), old_string, new_string)
+    replace_in_place(join_path(opts["project"], "manage.py"), old_string, new_string)
+
+    return struct, opts
 
 def create_django_proj(struct, opts):
     """Creates a standard Django project with django-admin.py
@@ -96,6 +117,7 @@ def create_django_proj(struct, opts):
     django_admin("startproject", opts["project"], log=True, pretend=pretend)
     if not pretend:
         src_dir = join_path(opts["project"], "src")
+        
         os.mkdir(src_dir)
         shutil.move(
             join_path(opts["project"], opts["project"]),
