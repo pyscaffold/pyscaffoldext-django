@@ -13,18 +13,25 @@ import os
 import shutil
 from os.path import join as join_path
 
+import re
 from pyscaffold.api import Extension, helpers
 from pyscaffold.shell import ShellCommand
 from pyscaffold.warnings import UpdateNotSupported
 
 django_admin = ShellCommand("django-admin.py")
 
-def replace_in_place(file_name, old_string, new_string):
-    with open(file_name, 'r') as f:
-        s = f.read()    
-    s = s.replace(old_string, new_string)
-    with open(file_name, 'w') as f:
-        f.write(s)
+
+def replace_in_place(file_name, regex, new_string):
+    if os.path.exists(file_name):
+        with open(file_name, 'r') as infile:
+            text = infile.read()    
+        replaced = re.sub(regex, new_string, text)
+        with open(file_name, 'w') as outfile:
+            outfile.write(replaced)
+        return True
+    else:
+        return False
+
 
 class Django(Extension):
     """Generate Django project files"""
@@ -78,14 +85,15 @@ def enforce_django_options(struct, opts):
     return struct, opts
 
 def fix_django_settings(struct, opts):
-    old_string = f"'{opts['project']}"
-    new_string = f"'src.{opts['project']}"
+    
+    new_string = "src.{0}".format(opts['project'])
+    regex = "{0}".format(opts['project'])
     src_dir = join_path(opts["project"], "src")
     config_dir = join_path(src_dir, opts["project"])
 
-    replace_in_place(join_path(config_dir, 'settings.py'), old_string, new_string)
-    replace_in_place(join_path(config_dir, 'wsgi.py'), old_string, new_string)
-    replace_in_place(join_path(opts["project"], "manage.py"), old_string, new_string)
+    replace_in_place(join_path(config_dir, 'settings.py'), regex, new_string)
+    replace_in_place(join_path(config_dir, 'wsgi.py'), regex, new_string)
+    replace_in_place(join_path(opts["project"], "manage.py"), regex, new_string)
 
     return struct, opts
 
