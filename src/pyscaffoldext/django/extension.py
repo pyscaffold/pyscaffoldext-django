@@ -24,13 +24,12 @@ django_admin = ShellCommand("django-admin.py")
 def replace_in_place(file_name, regex, new_string):
     if os.path.exists(file_name):
         with open(file_name, 'r') as infile:
-            text = infile.read()    
+            text = infile.read()
         replaced = re.sub(regex, new_string, text)
         with open(file_name, 'w') as outfile:
             outfile.write(replaced)
         return True
-    else:
-        return False
+    return False
 
 
 class Django(Extension):
@@ -84,18 +83,17 @@ def enforce_django_options(struct, opts):
 
     return struct, opts
 
+
 def fix_django_settings(struct, opts):
-    
     new_string = "src.{0}".format(opts['project'])
     regex = "{0}".format(opts['project'])
     src_dir = join_path(opts["project"], "src")
     config_dir = join_path(src_dir, opts["project"])
-
     replace_in_place(join_path(config_dir, 'settings.py'), regex, new_string)
     replace_in_place(join_path(config_dir, 'wsgi.py'), regex, new_string)
     replace_in_place(join_path(opts["project"], "manage.py"), regex, new_string)
-
     return struct, opts
+
 
 def create_django_proj(struct, opts):
     """Creates a standard Django project with django-admin.py
