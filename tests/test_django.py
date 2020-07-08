@@ -18,7 +18,10 @@ skip_py33 = pytest.mark.skipif(
 )
 
 PROJ_NAME = "proj"
-DJANGO_FILES = ["proj/manage.py", "proj/src/proj/wsgi.py"]
+DJANGO_FILES = ["proj/manage.py", "proj/src/proj/wsgi.py", "proj/src/proj/__main__.py"]
+
+# Workaround for PyScaffold <= 4.x, see comments on class
+FLAG = (lambda ext: getattr(ext, "xflag", ext.flag))(Django("django"))
 
 
 @skip_py33
@@ -41,7 +44,7 @@ def test_create_project_with_django(tmpfolder):
 def test_pretend_create_project_with_django(tmpfolder, caplog):
     # Given options with the django extension,
     caplog.set_level(logging.INFO)
-    opts = parse_args([PROJ_NAME, "--pretend", "--django"])
+    opts = parse_args([PROJ_NAME, "--pretend", FLAG])
     opts = process_opts(opts)
 
     # when the project is created,
@@ -84,7 +87,7 @@ def test_create_project_no_django(tmpfolder, nodjango_admin_mock):
 @pytest.mark.slow
 def test_cli_with_django(tmpfolder):
     # Given the command line with the django option,
-    sys.argv = ["pyscaffold", "--django", PROJ_NAME]
+    sys.argv = ["pyscaffold", FLAG, PROJ_NAME]
 
     # when pyscaffold runs,
     run()
@@ -96,7 +99,7 @@ def test_cli_with_django(tmpfolder):
 
 def test_cli_without_django(tmpfolder):
     # Given the command line without the django option,
-    sys.argv = ["pyscaffold", PROJ_NAME]
+    sys.argv = ["pyscaffold", PROJ_NAME, "-vv"]
 
     # when pyscaffold runs,
     run()
@@ -112,7 +115,7 @@ def test_cli_with_django_and_update(tmpfolder, capsys):
 
     # when the project is updated
     # with the django extension,
-    sys.argv = ["pyscaffold", PROJ_NAME, "--update", "--django"]
+    sys.argv = ["pyscaffold", PROJ_NAME, "--update", FLAG]
     run()
 
     # then a warning should be displayed
