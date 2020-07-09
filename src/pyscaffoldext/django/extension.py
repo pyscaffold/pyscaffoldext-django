@@ -9,11 +9,9 @@ Warning:
     ``pyscaffoldext-django`` in your system/virtualenv in order to be
     able to use it.
 """
-import os
 import re
-import shutil
 import stat
-from os.path import join as join_path
+from pathlib import Path
 
 from pyscaffold.api import Extension, helpers
 from pyscaffold.log import logger
@@ -134,35 +132,43 @@ def create_django_proj(struct, opts):
         raise DjangoAdminNotInstalled from e
 
     # TODO: replace project with project_path / name in PyScaffold 4.x
-    #       it would also be nice to use pathlib
 
     pretend = opts.get("pretend")
-    django_admin("startproject", opts["project"], log=True, pretend=pretend)
+    project_path = Path(opts["project"])
+    pkg_name = opts["project"]
 
-    src_dir = join_path(opts["project"], "src")
-    pkg_dir = join_path(src_dir, opts["project"])
-    orig_dir = join_path(opts["project"], opts["project"])
-    manage = join_path(opts["project"], "manage.py")
-    main = join_path(pkg_dir, "__main__.py")
-    settings = join_path(pkg_dir, "settings.py")
+    django_admin("startproject", str(project_path), log=True, pretend=pretend)
+
+    src_dir = project_path / "src"
+    pkg_dir = src_dir / pkg_name
+    orig_dir = project_path / pkg_name
 
     if not pretend:
-        os.mkdir(src_dir)
-        shutil.move(orig_dir, pkg_dir)
+        src_dir.mkdir(exist_ok=True)
+        orig_dir.rename(pkg_dir)
     helpers.logger.report("move", orig_dir, target=pkg_dir)
 
+    manage = project_path / "manage.py"
+    main = pkg_dir / "__main__.py"
+
     if not pretend:
-        shutil.move(manage, main)
+        manage.rename(main)
     helpers.logger.report("move", manage, target=main)
 
+    settings = pkg_dir / "settings.py"
     replace_default_database(helpers.logger, settings, pretend=pretend)
 
     if not pretend:
-        with open(manage, "w") as fh:
-            fh.write(templates.manage(opts))
-        os.chmod(manage, os.stat(manage).st_mode | stat.S_IXUSR)
+        manage.write_text(templates.manage(opts))
+        manage.chmod(manage.stat().st_mode | stat.S_IXUSR)
     helpers.logger.report("create", manage)
-    helpers.logger.report("chmod", "+x " + manage)
+    helpers.logger.report("chmod", "+x {}".format(manage))
+
+    struct = helpers.modify(
+        struct,
+        project_path / ".gitignore",
+        lambda contents: "{}\n\n# Django\n/*.sqlite3".format(contents),
+    )
 
     return struct, opts
 
@@ -186,26 +192,24 @@ REPLACEMENT = 'os.path.join(os.path.dirname(BASE_DIR), "db.sqlite3")'
 
 
 def replace_default_database(
-    logger, file_name, pattern=PATTERN, replacement=REPLACEMENT, pretend=False
+    logger, file_path, pattern=PATTERN, replacement=REPLACEMENT, pretend=False
 ):
     exception = DjangoVersionMightBeUnsupported(
         "Failed attempt to replace the default sqlite3 database file with "
-        "{} in {}.".format(file_name, REPLACEMENT)
+        "{} in {}.".format(REPLACEMENT, file_path)
     )
 
     try:
         if not pretend:
-            with open(file_name, "r") as infile:
-                text = infile.read()
+            text = file_path.read_text()
             replaced, n = pattern.subn(replacement, text)
             if n < 1:
                 # No substitution was made, there is something wrong with the
                 # assumptions on how the file should be.
+                raise SystemError(text)
                 raise exception
-            with open(file_name, "w") as outfile:
-                outfile.write(replaced)
-
-        logger.report("replace", "default database in " + file_name)
+            file_path.write_text(replaced)
+        logger.report("replace", "default database in {}".format(file_path))
     except PyScaffoldDjangoError:
         raise
     except Exception as ex:
