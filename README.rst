@@ -23,10 +23,10 @@ pyscaffoldext-django
 This extension allows the development of `Django`_ websites using
 PyScaffold sensible project structure, by tapping into the `django-admin`_ cli.
 
-    **LOOKING FOR CONTRIBUTORS** - If you use both PyScaffold and Django and
-    would like to step in as a contributor or maintainer for this extension,
-    please send us an email or open an issue, we would love to have you on
-    board.
+    **LOOKING FOR CONTRIBUTORS** - If you use PyScaffold or Django and would
+    like to help us as a contributor (or even as one of the maintainers) for
+    this extension, please send us an email or open an issue, we would love to
+    have you on board.
 
 
 Quickstart
@@ -82,7 +82,7 @@ We move/rename the ``manage.py`` file to ``myapp/src/myapp/__main__.py``. This
 makes it possible to manage the application using ``python -m myapp`` when
 it is installed as a package (instead of ``python manage.py``).
 All the arguments remain the same.
-Please check the :ref:`Caveats <caveats>` section bellow for more information.
+Please check the :ref:`section bellow <caveats>` for more information.
 
 Running the script with ``python -m`` requires your package to be installed
 (a simple ``pip install -e .`` will suffice), however we also generate a new
@@ -96,8 +96,8 @@ please try to execute this procedure.
 
 .. _caveats:
 
-Caveats
-=======
+Distributable Django Packages
+=============================
 
 Django is a framework for creating web applications, and PyScaffold is a tool
 that helps to build re-usable, distributable packages - which most of the time
@@ -189,8 +189,8 @@ One example on how to use nested apps is:
     # … remeber to use relative imports or the full package name "website.subapp" when needed
 
 
-Tips for deploying a Django app as a Python package
-===================================================
+Tips
+====
 
 #. Have a look on `Django's guides`_, but remember that PyScaffold already do
    the heavy lifting for you (no need to write packaging configuration from
