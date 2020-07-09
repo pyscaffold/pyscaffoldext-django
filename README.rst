@@ -82,7 +82,7 @@ We move/rename the ``manage.py`` file to ``myapp/src/myapp/__main__.py``. This
 makes it possible to manage the application using ``python -m myapp`` when
 it is installed as a package (instead of ``python manage.py``).
 All the arguments remain the same.
-Please check the :ref:`section bellow <caveats>` for more information.
+Please check the next section for more information.
 
 Running the script with ``python -m`` requires your package to be installed
 (a simple ``pip install -e .`` will suffice), however we also generate a new
@@ -93,8 +93,6 @@ For complex use cases, maybe a better option is to do the conversion
 manually. If you find problems running PyScaffold with ``--django``
 please try to execute this procedure.
 
-
-.. _caveats:
 
 Distributable Django Packages
 =============================
