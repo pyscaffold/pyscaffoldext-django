@@ -110,14 +110,14 @@ create a package with PyScaffold that serves a Django app.
 The first reason is that applications usually require concrete dependencies
 (pinned version numbers), while libraries are more relaxed and tend to use
 abstract dependencies (ranges of version numbers). You can read all about the
-differences between those two approaches in PyScaffold's documentation, however
-the main point is: when creating packages for webapps you have two options
+differences between those two approaches in `PyScaffold's documentation`_,
+however the main point is: when creating packages for webapps you have two options
 
-- **Use concrete dependencies**: pin the exact version number for your
+:Use concrete dependencies: pin the exact version number for your
   dependencies to avoid bugs (*it works on my machine*\ :sup:`TM`), but
   instruct your users that the package should be installed within a
   **dedicated** `virtual environment`_ to avoid dependency hell; or
-- **Use abstract dependencies**: prefer relaxed dependency ranges (e.g. relying
+:Use abstract dependencies: prefer relaxed dependency ranges (e.g. relying
   on stable APIs of  dependencies that use `semver`_), but test extensively
   your module against different installed versions to make sure nothing breaks
   (`tox`_ and `nox`_ are good tools for that).
@@ -125,18 +125,18 @@ the main point is: when creating packages for webapps you have two options
 .. _managepy:
 
 The second reason is that Django expects the user of your application to have
-control on where the source code is placed, and this simply don't go well with
+control on where the source code is placed, and this simply doesn't go well with
 pip installing locations deeply hidden somewhere in the file system (e.g.
 ``/home/username/my-venvs/web-app/lib/python3.6/site-packages/my-web-app``)…
 
-For example, before starting a Django application you are supposed to run
+For example, before starting a Django application server you are supposed to run
 migrations to prepare the correct structure in the database to receive your
 data. This is usually achieved by running ``python manage.py migrate`` at the
 root of your directory, however, if someone is installing your app using pip,
 how does this person knows where to find the ``manage.py`` file?
 
 To solve this problem, ``pyscaffoldext-django`` renames ``manage.py`` to
-|mainpy|_ and moves it inside your web application package. Since it become
+|mainpy|_ and moves it inside your web application package. Since it becomes
 part of your package, the script will be accessible via ``python -m YOUR_PACKAGE_NAME
 <commands>`` from everywhere in the system, and therefore no one installing it
 with pip needs to know where it is.
@@ -153,7 +153,7 @@ this problem for you. Instead you can follow a few approaches:
    distribute it as a `package data`_, accessing it via `importlib.resources`_.
    (Please note resources are supposed to be immutable and not re-written to disk)
 #. Allow the person installing your package to specify a different
-   configuration via environment variables. According to the `mozilla
+   configuration via environment variables. According to the `Mozilla's
    tutorials`_, the library `dj-database-url`_ is good for that.
 #. Place your SQLite database `somewhere in the user home`_.
 
@@ -163,8 +163,8 @@ it is your responsibility to change this when going into production.
 
 .. _multiple-apps:
 
-Finally, it is important to notice that, while Django incentivates developers
-to create separated folder for top-level applications, this is more or less
+Finally, it is important to notice that, while it is popular in the Django community
+to create separated top-level folders for independent applications, this is more or less
 incompatible with the concept of a Python package...
 One entry in PyPI should install a single package in your machine. Ideally, if
 you use `multiple apps`_, you should deploy a different package for each of
@@ -212,7 +212,7 @@ Tips
    tweak file/folder permissions in your operating system (e.g. the command
    ``chmod og-rwx`` is your friend, but you can also consider ``400``
    permissions). Instructing the person installing your package to create a
-   separated system account to run your web app, with limited privileges might
+   separated system account to run your web app with limited privileges might
    also be good.
 #. Provide extensive documentation on how your users are supposed to install
    and run your app (e.g. virtualenv installation instructions,
@@ -227,6 +227,7 @@ information on PyScaffold see https://pyscaffold.org/.
 
 
 .. _PyScaffold: https://pyscaffold.org
+.. _PyScaffold's documentation: https://pyscaffold.org/en/latest/dependencies.html
 .. _Django: https://www.djangoproject.com/
 .. _django-admin: https://docs.djangoproject.com/en/2.2/ref/django-admin/
 .. _extension: https://pyscaffold.org/en/latest/extensions.html
@@ -238,7 +239,7 @@ information on PyScaffold see https://pyscaffold.org/.
 .. _mainpy: https://docs.python.org/3/library/__main__.html
 .. _package data: https://pyscaffold.org/en/latest/features.html#configuration-packaging-distribution
 .. _importlib.resources: https://docs.python.org/3/library/importlib.html#module-importlib.resources
-.. _mozilla tutorials: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Deployment
+.. _Mozilla's tutorials: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Deployment
 .. _dj-database-url: https://pypi.org/project/dj-database-url/
 .. _XDG standards: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 .. _somewhere in the user home: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
