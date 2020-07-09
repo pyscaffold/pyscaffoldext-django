@@ -13,10 +13,6 @@ from pyscaffold.templates import setup_py
 
 from pyscaffoldext.django.extension import Django, DjangoAdminNotInstalled
 
-skip_py33 = pytest.mark.skipif(
-    sys.version_info[:2] == (3, 3), reason="django-admin.py fails with Python 3.3"
-)
-
 PROJ_NAME = "proj"
 DJANGO_FILES = ["proj/manage.py", "proj/src/proj/wsgi.py", "proj/src/proj/__main__.py"]
 
@@ -24,7 +20,6 @@ DJANGO_FILES = ["proj/manage.py", "proj/src/proj/wsgi.py", "proj/src/proj/__main
 FLAG = (lambda ext: getattr(ext, "xflag", ext.flag))(Django("django"))
 
 
-@skip_py33
 @pytest.mark.slow
 def test_create_project_with_django(tmpfolder):
     # Given options with the django extension,
@@ -40,7 +35,6 @@ def test_create_project_with_django(tmpfolder):
     tmpfolder.join(PROJ_NAME).join("setup.py").read() == setup_py(opts)
 
 
-@skip_py33
 def test_pretend_create_project_with_django(tmpfolder, caplog):
     # Given options with the django extension,
     caplog.set_level(logging.INFO)
@@ -83,7 +77,6 @@ def test_create_project_no_django(tmpfolder, nodjango_admin_mock):
         create_project(opts)
 
 
-@skip_py33
 @pytest.mark.slow
 def test_cli_with_django(tmpfolder):
     # Given the command line with the django option,
