@@ -4,12 +4,6 @@ import sys
 import traceback
 from os import environ
 from subprocess import STDOUT, CalledProcessError, check_output
-from uuid import uuid4
-
-
-def uniqstr():
-    """Generates a unique random long string every time it is called"""
-    return str(uuid4()).replace("-", "")
 
 
 def run(*args, **kwargs):
