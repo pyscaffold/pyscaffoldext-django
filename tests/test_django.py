@@ -16,7 +16,7 @@ from pyscaffoldext.django.extension import Django, DjangoAdminNotInstalled
 PROJ_NAME = "proj"
 DJANGO_FILES = ["proj/manage.py", "proj/src/proj/wsgi.py", "proj/src/proj/__main__.py"]
 
-# Workaround for PyScaffold <= 4.x, see comments on class
+# TODO: Remove workaround for PyScaffold <= 4.x, see comments on class
 FLAG = (lambda ext: getattr(ext, "xflag", ext.flag))(Django("django"))
 
 

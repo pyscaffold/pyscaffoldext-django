@@ -12,7 +12,7 @@ from .helpers import run, run_common_tasks, uniqstr
 
 pytestmark = [pytest.mark.slow, pytest.mark.system]
 
-# Workaround for PyScaffold <= 4.x, see comments on class
+# TODO: Remove workaround for PyScaffold <= 4.x, see comments on class
 FLAG = (lambda ext: getattr(ext, "xflag", ext.flag))(Django("django"))
 
 
