@@ -1,19 +1,21 @@
-# -*- coding: utf-8 -*-
 import sys
 from contextlib import suppress
-from os.path import exists
+from glob import glob
+from pathlib import Path
 from subprocess import CalledProcessError
 
 import pytest
+from pyscaffold import file_system as fs
+from pyscaffold import shell
+from pyscaffold.identification import underscore
 
 from pyscaffoldext.django.extension import Django
 
-from .helpers import run, run_common_tasks, uniqstr
+from ..helpers import PYTHON, run, uniqstr
 
-pytestmark = [pytest.mark.slow, pytest.mark.system]
-
-# TODO: Remove workaround for PyScaffold <= 4.x, see comments on class
-FLAG = (lambda ext: getattr(ext, "xflag", ext.flag))(Django("django"))
+FLAG = Django().flag
+PUTUP = shell.get_executable("putup")
+PIP = shell.get_executable("pip")
 
 
 def is_venv():
@@ -24,10 +26,13 @@ def is_venv():
 
 
 @pytest.fixture(autouse=True)
-def cwd(tmpdir):
+def cwd(tmpfolder):
     """Guarantee a blank folder as workspace"""
-    with tmpdir.as_cwd():
-        yield tmpdir
+    yield tmpfolder
+
+
+def chdir(path):
+    return fs.chdir(fs.create_directory(path))
 
 
 def test_ensure_inside_test_venv():
@@ -36,21 +41,23 @@ def test_ensure_inside_test_venv():
     # a local virtualenv (pytest-runner), so we know we are testing the correct
     # version of pyscaffold and not one the devs installed to use in other
     # projects
-    assert ".tox" in run("which putup") or is_venv()
+    assert PUTUP
+    assert PIP
+    assert ".tox" in PUTUP or is_venv()
+    assert Path(PUTUP).parent == Path(PIP).parent
 
 
-def test_django_generates_files(cwd):
+def test_django_generates_files(tmpfolder):
     # Given pyscaffold is installed,
     # when we call putup with extensions
     name = "myproj"
-    run("putup", FLAG, name)
-    with cwd.join(name).as_cwd():
+    run(PUTUP, "--no-config", FLAG, name)
+    # --no-config: avoid extra config from dev's machine interference
+    with chdir(tmpfolder / name):
         # then special files should be created
-        assert exists("manage.py")
-        assert exists("src/myproj/__main__.py")
-        assert not exists("myproj")
-        # and all the common tasks should run properly
-        run_common_tasks(flake8=False)
+        assert Path("manage.py").exists()
+        assert Path("src/myproj/__main__.py").exists()
+        assert not Path("myproj").exists()
 
 
 TASKS = [
@@ -63,34 +70,36 @@ TASKS = [
 
 def remove_eventual_package(name):
     with suppress(Exception, CalledProcessError):
-        run("pip uninstall --yes {}".format(name))
+        run(f"{PIP} uninstall --yes {name}")
 
 
+@pytest.mark.slow
+@pytest.mark.system
 @pytest.mark.parametrize(
     "name,command",
     [
-        ("pkg" + uniqstr(), "python manage.py"),
-        (lambda x: (x, "python -m " + x))("pkg" + uniqstr()),
+        ("pkg" + uniqstr(), f"{PYTHON} manage.py"),
+        (lambda x: (x, f"{PYTHON} -m " + underscore(x)))("pkg" + uniqstr()),
     ],
 )
-def test_manage_py_runs_nicely(cwd, name, command):
+def test_manage_py_runs_nicely(tmpfolder, name, command):
     # Given we have a project generated with putup --django pkg
     try:
         remove_eventual_package(name)
-        run("putup", FLAG, name)
-        with cwd.join(name).as_cwd():
-            run("ls -la")
-            run("cat manage.py")
-            run("ls -la src/{}".format(name))
-            run("pip install -Ie .")  # required for `python -m`
+        run(PUTUP, "--no-config", FLAG, name)
+        with chdir(tmpfolder / name):
+            print(list(glob("*")))
+            print(list(Path("src").glob("*/*")))
+            print(Path("manage.py").read_text())
+            run(f"{PIP} install -Ie .")  # required for `python -m`
 
             # when we call manage.py or python -m djangotest
-            run("{} migrate".format(command))
+            run(f"{command} migrate")
             # then it should create a sqlite3 file in the right place
-            assert exists("db.sqlite3")
-            assert not exists("src/db.sqlite3")
+            assert Path("db.sqlite3").exists()
+            assert not Path("src/db.sqlite3").exists()
             # and everything should be fine
             for task in TASKS:
-                run("{} {}".format(command, task))
+                run(f"{command} {task}")
     finally:
         remove_eventual_package(name)

@@ -217,10 +217,28 @@ Tips
    ngnix/apache/systemd configuration examples, etc...)
 
 
+.. pyscaffold-notes::
+
+Making Changes & Contributing
+=============================
+
+This project uses `pre-commit`_, please make sure to install it before making any
+changes::
+
+    $ pip install pre-commit
+    $ cd pyscaffoldext-django
+    $ pre-commit install
+
+It is a good idea to update the hooks to the latest version::
+
+    pre-commit autoupdate
+
+Don't forget to tell your contributors to also install and use pre-commit.
+
 Note
 ====
 
-This project has been set up using PyScaffold 3.2. For details and usage
+This project has been set up using PyScaffold 4.0a2. For details and usage
 information on PyScaffold see https://pyscaffold.org/.
 
 
@@ -245,3 +263,4 @@ information on PyScaffold see https://pyscaffold.org/.
 .. _Django's guides: https://docs.djangoproject.com/en/3.0/intro/reusable-apps/
 .. _multiple apps: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/skeleton_website
 .. _src-based layout: https://blog.ionelmc.ro/2014/05/25/python-packaging/
+.. _pre-commit: http://pre-commit.com/

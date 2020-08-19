@@ -1,53 +1,50 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import logging
 import re
-import sys
-from os.path import exists as path_exists
+from pathlib import Path
 
 import pytest
-
-from pyscaffold.api import create_project
-from pyscaffold.cli import parse_args, process_opts, run
-from pyscaffold.templates import setup_py
+from pyscaffold.api import NO_CONFIG, create_project
+from pyscaffold.cli import parse_args, run
+from pyscaffold.templates import get_template
 
 from pyscaffoldext.django.extension import Django, DjangoAdminNotInstalled
 
 PROJ_NAME = "proj"
 DJANGO_FILES = ["proj/manage.py", "proj/src/proj/wsgi.py", "proj/src/proj/__main__.py"]
 
-# TODO: Remove workaround for PyScaffold <= 4.x, see comments on class
-FLAG = (lambda ext: getattr(ext, "xflag", ext.flag))(Django("django"))
+FLAG = Django().flag
 
 
 @pytest.mark.slow
 def test_create_project_with_django(tmpfolder):
     # Given options with the django extension,
-    opts = dict(project=PROJ_NAME, extensions=[Django("django")])
+    opts = dict(project_path=PROJ_NAME, extensions=[Django()], config_files=NO_CONFIG)
+    # NO_CONFIG: avoid extra config from dev's machine interference
 
     # when the project is created,
     create_project(opts)
 
     # then django files should exist
     for path in DJANGO_FILES:
-        assert path_exists(path)
+        assert Path(path).exists()
     # and also overwritable pyscaffold files (with the exact contents)
-    tmpfolder.join(PROJ_NAME).join("setup.py").read() == setup_py(opts)
+    existing = (tmpfolder / PROJ_NAME / "setup.py").read()
+    assert existing == get_template("setup_py").safe_substitute(opts)
 
 
 def test_pretend_create_project_with_django(tmpfolder, caplog):
     # Given options with the django extension,
     caplog.set_level(logging.INFO)
-    opts = parse_args([PROJ_NAME, "--pretend", FLAG])
-    opts = process_opts(opts)
+    opts = parse_args([PROJ_NAME, "--no-config", "--pretend", FLAG])
+    # --no-config: avoid extra config from dev's machine interference
 
     # when the project is created,
     create_project(opts)
 
     # then files should exist
-    assert not path_exists(PROJ_NAME)
+    assert not Path(PROJ_NAME).exists()
     for path in DJANGO_FILES:
-        assert not path_exists(path)
+        assert not Path(path).exists()
 
     # but activities should be logged
     logs = caplog.text
@@ -56,20 +53,22 @@ def test_pretend_create_project_with_django(tmpfolder, caplog):
 
 def test_create_project_without_django(tmpfolder):
     # Given options without the django extension,
-    opts = dict(project=PROJ_NAME)
+    opts = dict(project_path=PROJ_NAME, config_files=NO_CONFIG)
+    # NO_CONFIG: avoid extra config from dev's machine interference
 
     # when the project is created,
     create_project(opts)
 
     # then django files should not exist
     for path in DJANGO_FILES:
-        assert not path_exists(path)
+        assert not Path(path).exists()
 
 
 def test_create_project_no_django(tmpfolder, nodjango_admin_mock):
     # Given options with the django extension,
     # but without django-admin being installed,
-    opts = dict(project=PROJ_NAME, extensions=[Django("django")])
+    opts = dict(project_path=PROJ_NAME, extensions=[Django()], config_files=NO_CONFIG)
+    # NO_CONFIG: avoid extra config from dev's machine interference
 
     # when the project is created,
     # then an exception should be raised.
@@ -80,36 +79,39 @@ def test_create_project_no_django(tmpfolder, nodjango_admin_mock):
 @pytest.mark.slow
 def test_cli_with_django(tmpfolder):
     # Given the command line with the django option,
-    sys.argv = ["pyscaffold", FLAG, PROJ_NAME]
+    args = ["--no-config", FLAG, PROJ_NAME]
+    # --no-config: avoid extra config from dev's machine interference
 
     # when pyscaffold runs,
-    run()
+    run(args)
 
     # then django files should exist
     for path in DJANGO_FILES:
-        assert path_exists(path)
+        assert Path(path).exists()
 
 
 def test_cli_without_django(tmpfolder):
     # Given the command line without the django option,
-    sys.argv = ["pyscaffold", PROJ_NAME, "-vv"]
+    args = ["-vv", "--no-config", PROJ_NAME]
+    # --no-config: avoid extra config from dev's machine interference
 
     # when pyscaffold runs,
-    run()
+    run(args)
 
     # then django files should not exist
     for path in DJANGO_FILES:
-        assert not path_exists(path)
+        assert not Path(path).exists()
 
 
 def test_cli_with_django_and_update(tmpfolder, capsys):
     # Given a project exists
-    create_project(project=PROJ_NAME)
+    create_project(project_path=PROJ_NAME, config_files=NO_CONFIG)
+    # NO_CONFIG: avoid extra config from dev's machine interference
 
     # when the project is updated
     # with the django extension,
-    sys.argv = ["pyscaffold", PROJ_NAME, "--update", FLAG]
-    run()
+    run([PROJ_NAME, "--no-config", "--update", FLAG])
+    # --no-config: avoid extra config from dev's machine interference
 
     # then a warning should be displayed
     out, err = capsys.readouterr()
