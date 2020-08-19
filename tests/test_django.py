@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 
 import pytest
+from pyscaffold import __version__ as pyscaffold_version
 from pyscaffold.api import NO_CONFIG, create_project
 from pyscaffold.cli import parse_args, run
 from pyscaffold.templates import get_template
@@ -18,7 +19,14 @@ FLAG = Django().flag
 @pytest.mark.slow
 def test_create_project_with_django(tmpfolder):
     # Given options with the django extension,
-    opts = dict(project_path=PROJ_NAME, extensions=[Django()], config_files=NO_CONFIG)
+    opts = dict(
+        project_path=PROJ_NAME,
+        name=PROJ_NAME,
+        package=PROJ_NAME,
+        extensions=[Django()],
+        version=pyscaffold_version,
+        config_files=NO_CONFIG,
+    )
     # NO_CONFIG: avoid extra config from dev's machine interference
 
     # when the project is created,
@@ -28,7 +36,7 @@ def test_create_project_with_django(tmpfolder):
     for path in DJANGO_FILES:
         assert Path(path).exists()
     # and also overwritable pyscaffold files (with the exact contents)
-    existing = (tmpfolder / PROJ_NAME / "setup.py").read()
+    existing = (tmpfolder / PROJ_NAME / "setup.py").read_text()
     assert existing == get_template("setup_py").safe_substitute(opts)
 
 
