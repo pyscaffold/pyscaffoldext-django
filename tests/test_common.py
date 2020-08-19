@@ -11,7 +11,7 @@ from pyscaffold.identification import underscore
 
 from pyscaffoldext.django.extension import Django
 
-from ..helpers import PYTHON, run, uniqstr
+from .helpers import PYTHON, run, uniqstr
 
 FLAG = Django().flag
 PUTUP = shell.get_executable("putup")
