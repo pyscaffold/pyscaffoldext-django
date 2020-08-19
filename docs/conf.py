@@ -76,6 +76,7 @@ extensions = [
     "sphinx.ext.ifconfig",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
+    "sphinxcontrib.spelling",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -140,20 +141,21 @@ pygments_style = "sphinx"
 # If true, keep warnings as "system message" paragraphs in the built documents.
 # keep_warnings = False
 
+# -- Options for Spell Check ---------------------------------------------------
+spelling_lang = "en_US"
+spelling_word_list_filename = os.path.join(os.path.dirname(__file__), ".spell")
+spelling_show_suggestions = True
 
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = "alabaster"
+html_theme = "sphinx_rtd_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {
-    "sidebar_width": "300px",
-    "page_width": "1200px"
-}
+html_theme_options = {"sidebar_width": "300px", "page_width": "1200px"}
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []
@@ -243,7 +245,13 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ("index", "user_guide.tex", "pyscaffoldext-django Documentation", "Anderson Bravalheri", "manual")
+    (
+        "index",
+        "user_guide.tex",
+        "pyscaffoldext-django Documentation",
+        "Anderson Bravalheri",
+        "manual",
+    )
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -269,12 +277,12 @@ latex_documents = [
 # -- External mapping --------------------------------------------------------
 python_version = ".".join(map(str, sys.version_info[0:2]))
 intersphinx_mapping = {
-    'sphinx': ('http://www.sphinx-doc.org/en/stable', None),
-    'python': ('https://docs.python.org/' + python_version, None),
-    'matplotlib': ('https://matplotlib.org', None),
-    'numpy': ('https://docs.scipy.org/doc/numpy', None),
-    'sklearn': ('http://scikit-learn.org/stable', None),
-    'pandas': ('http://pandas.pydata.org/pandas-docs/stable', None),
-    'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
-    'pyscaffold': ('https://pyscaffold.org/en/latest', None),
+    "sphinx": ("http://www.sphinx-doc.org/en/stable", None),
+    "python": ("https://docs.python.org/" + python_version, None),
+    "matplotlib": ("https://matplotlib.org", None),
+    "numpy": ("https://docs.scipy.org/doc/numpy", None),
+    "sklearn": ("https://scikit-learn.org/stable", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/stable", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
+    "pyscaffold": ("https://pyscaffold.org/en/stable", None),
 }
