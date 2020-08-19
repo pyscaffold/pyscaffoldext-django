@@ -217,7 +217,7 @@ Tips
    ngnix/apache/systemd configuration examples, etc...)
 
 
-.. pyscaffold-notes::
+.. _pyscaffold-notes:
 
 Making Changes & Contributing
 =============================
@@ -233,7 +233,7 @@ It is a good idea to update the hooks to the latest version::
 
     pre-commit autoupdate
 
-Don't forget to tell your contributors to also install and use pre-commit.
+Please also check PyScaffold's `contribution guidelines`_,
 
 Note
 ====
@@ -264,3 +264,4 @@ information on PyScaffold see https://pyscaffold.org/.
 .. _multiple apps: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/skeleton_website
 .. _src-based layout: https://blog.ionelmc.ro/2014/05/25/python-packaging/
 .. _pre-commit: http://pre-commit.com/
+.. _contribution guidelines: https://pyscaffold.org/en/latest/contributing.html
