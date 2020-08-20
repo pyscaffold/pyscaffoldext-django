@@ -33,6 +33,8 @@ template = partial(get_template, relative_to=templates)
 class Django(Extension):
     """Generate Django project files"""
 
+    persist = False
+
     def activate(self, actions: List[Action]) -> List[Action]:
         """Activate extension. See :obj:`pyscaffold.extension.Extension.activate`."""
         actions = self.register(actions, enforce_options, after="get_default_options")
