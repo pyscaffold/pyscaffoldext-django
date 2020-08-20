@@ -41,7 +41,7 @@ fi
 
 # for all
 pip install -U pip setuptools
-pip install tox
+pip install tox mypy
 
 if [[ "$COVERAGE" == "true" ]]; then
     pip install -U pytest-cov pytest-virtualenv coverage coveralls flake8 pre-commit

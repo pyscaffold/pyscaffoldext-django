@@ -30,6 +30,10 @@ script:
   - tox -e build
   - tox
   - |
+    if [[ "$TOX_PYTHON_VERSION" == "py38" ]]; then
+      mypy "src/pyscaffoldext"
+    fi
+  - |
     if [[ "$COVERAGE" == "true" ]]; then
       pre-commit install
       pre-commit run --all-files

@@ -40,9 +40,9 @@ def test_create_project_with_django(tmpfolder):
     assert existing == get_template("setup_py").safe_substitute(opts)
 
 
-def test_pretend_create_project_with_django(tmpfolder, caplog):
+def test_pretend_create_project_with_django(tmpfolder, isolated_log):
     # Given options with the django extension,
-    caplog.set_level(logging.INFO)
+    isolated_log.set_level(logging.INFO)
     opts = parse_args([PROJ_NAME, "--no-config", "--pretend", FLAG])
     # --no-config: avoid extra config from dev's machine interference
 
@@ -55,7 +55,7 @@ def test_pretend_create_project_with_django(tmpfolder, caplog):
         assert not Path(path).exists()
 
     # but activities should be logged
-    logs = caplog.text
+    logs = isolated_log.text
     assert re.search(r"run.+django", logs)
 
 

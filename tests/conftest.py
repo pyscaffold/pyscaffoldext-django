@@ -34,14 +34,14 @@ def nodjango_admin_mock(monkeypatch):
     yield
 
 
-@pytest.fixture(autouse=True)
-def isolated_logger(request, monkeypatch):
+@pytest.fixture
+def isolated_log(request, monkeypatch, caplog):
     """See isolated_logger in pyscaffold/tests/conftest.py to see why this fixture
     is important to guarantee tests checking logs work as expected.
     This just work for multiprocess environments, not multithread.
     """
     if "original_logger" in request.keywords:
-        yield
+        yield caplog
         return
 
     # Get a fresh new logger, not used anywhere
@@ -60,6 +60,6 @@ def isolated_logger(request, monkeypatch):
         monkeypatch.setattr(f"pyscaffold.log.logger.{key}", value)
 
     try:
-        yield
+        yield caplog
     finally:
         new_handler.close()

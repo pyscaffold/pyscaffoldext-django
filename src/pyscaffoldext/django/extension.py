@@ -2,6 +2,12 @@
 Extension that creates a base structure for the project using django-admin.
 from typing import List
 """
+
+# This file was transfered from the main PyScaffold repository using
+# ``git filter-branch``, and therefore might have lost parts of its
+# commit history.
+# Please refer to ``pyscaffold`` if that is needed.
+
 import re
 import stat
 from functools import partial
