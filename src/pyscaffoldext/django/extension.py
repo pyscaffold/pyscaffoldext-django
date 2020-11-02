@@ -22,12 +22,17 @@ from pyscaffold.operations import add_permissions
 from pyscaffold.shell import ShellCommand
 from pyscaffold.structure import merge, reify_content, resolve_leaf
 from pyscaffold.templates import get_template
-from pyscaffold.warnings import UpdateNotSupported
 
 from . import templates
 
 django_admin = ShellCommand("django-admin")
 template = partial(get_template, relative_to=templates)
+
+UPDATE_WARNING = (
+    "Updating code generated using external tools is not "
+    "supported. The extension `django` will be ignored, only "
+    "changes in PyScaffold core features will take place."
+)
 
 
 class Django(Extension):
@@ -59,7 +64,7 @@ def create_django(struct: Structure, opts: ScaffoldOpts) -> ActionParams:
         :obj:`RuntimeError`: raised if django-admin is not installed
     """
     if opts.get("update"):
-        logger.warning(UpdateNotSupported(extension="django"))
+        logger.warning(UPDATE_WARNING)
         return struct, opts
 
     try:
