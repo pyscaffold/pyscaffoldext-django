@@ -111,7 +111,7 @@ def test_cli_without_django(tmpfolder):
         assert not Path(path).exists()
 
 
-def test_cli_with_django_and_update(tmpfolder, capsys):
+def test_cli_with_django_and_update(tmpfolder, capfd):
     # Given a project exists
     create_project(project_path=PROJ_NAME, config_files=NO_CONFIG)
     # NO_CONFIG: avoid extra config from dev's machine interference
@@ -122,7 +122,7 @@ def test_cli_with_django_and_update(tmpfolder, capsys):
     # --no-config: avoid extra config from dev's machine interference
 
     # then a warning should be displayed
-    out, err = capsys.readouterr()
+    out, err = capfd.readouterr()
     assert all(
         warn in out + err
         for warn in ("external tools", "not supported", "will be ignored")
