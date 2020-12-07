@@ -7,6 +7,7 @@ git:
   depth: false
 env:
   - PRE_COMMIT_HOME=$HOME/.cache/pre-commit
+  - PRE_COMMIT_LOG=$PRE_COMMIT_HOME/pre-commit.log
 virtualenv:
   system_site_packages: false
 jobs:
@@ -40,6 +41,8 @@ script:
     fi
 after_success:
   - if [[ "$COVERAGE" == "true" ]]; then coveralls || echo "failed"; fi
+after_failure:
+  - if [[ -e "$PRE_COMMIT_LOG" ]]; then cat $PRE_COMMIT_LOG; fi
 after_script:
   - travis-cleanup
 cache:
