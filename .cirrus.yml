@@ -30,7 +30,7 @@ env:
   build_script: &build
     - python -m tox -e build  # Ensure PEP517-style build works
   test_script: &test
-    - python -m tox -e all -- -n 5 -rfEx --durations 10 --color yes --junit-xml junit-test.xml
+    - python -m tox -- -n 5 -rfEx --durations 10 --color yes --junit-xml junit-test.xml
     # ^  tox is better if invoked as a module on Windows/OSX
   always: &upload-junit
     upload_junit_artifacts:
