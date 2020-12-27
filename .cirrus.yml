@@ -4,7 +4,7 @@ auto_cancellation: false
 env:
   PATH: ${HOME}/.local/bin:${PATH}
   # ^  add user paths
-  COVERALLS_REPO_TOKEN: ENCRYPTED[]
+  COVERALLS_REPO_TOKEN: ENCRYPTED[22a85dc880ae6da1fb9d51062025144921f05eb70df35e2365575eab4b0d997c92893d72293b19344d7e9f2db32df15e]
   PIP_CACHE: ${HOME}/.cache/pip
   PRE_COMMIT_HOME: ${HOME}/.cache/pre-commit
   LC_ALL: C.UTF-8
