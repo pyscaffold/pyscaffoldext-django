@@ -1,6 +1,6 @@
-.. image:: https://travis-ci.org/pyscaffold/pyscaffoldext-django.svg?branch=master
-    :alt: Travis
-    :target: https://travis-ci.org/pyscaffold/pyscaffoldext-django
+.. image:: https://api.cirrus-ci.com/github/pyscaffold/pyscaffoldext-django.svg?branch=master
+    :alt: Built Status
+    :target: https://cirrus-ci.com/github/pyscaffold/pyscaffoldext-django
 .. image:: https://readthedocs.org/projects/pyscaffoldext-django/badge/?version=latest
     :alt: ReadTheDocs
     :target: https://pyscaffoldext-django.readthedocs.io/
