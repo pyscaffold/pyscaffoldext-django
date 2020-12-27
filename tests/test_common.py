@@ -11,7 +11,7 @@ from pyscaffold.identification import underscore
 
 from pyscaffoldext.django.extension import Django
 
-from .helpers import PYTHON, run, uniqstr
+from .helpers import PYTHON, run
 
 FLAG = Django().flag
 PUTUP = shell.get_executable("putup")
@@ -73,13 +73,20 @@ def remove_eventual_package(name):
         run(f"{PIP} uninstall --yes {name}")
 
 
+RND_NAME1 = "pkg82b3f28b-2811-4126-99a7-c88b4eb3fbb9"
+RND_NAME2 = "pkg9402c0de-c719-41b6-83ad-35c477fcc517"
+# ^  Fixed random values.
+#    If we use random values for parametrization pytest-xdist gets confused
+#    and returns an error.
+
+
 @pytest.mark.slow
 @pytest.mark.system
 @pytest.mark.parametrize(
     "name,command",
     [
-        ("pkg" + uniqstr(), f"{PYTHON} manage.py"),
-        (lambda x: (x, f"{PYTHON} -m " + underscore(x)))("pkg" + uniqstr()),
+        (RND_NAME1, f"{PYTHON} manage.py"),
+        (lambda x: (x, f"{PYTHON} -m " + underscore(x)))(RND_NAME2),
     ],
 )
 def test_manage_py_runs_nicely(tmpfolder, name, command):
