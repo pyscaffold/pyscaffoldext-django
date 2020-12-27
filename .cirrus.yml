@@ -54,7 +54,8 @@ typecheck_task:
   clean_workspace_script:
     - rm -rf junit-*.xml
   typecheck_script:
-    - python -m mypy src --junit-xml junit-type.xml
+    - python -m mypy src/pyscaffoldext --junit-xml junit-type.xml
+      # ^  mypy support for PEP 420 is a bit flaky
   always: *upload-junit
 
 
