@@ -11,7 +11,7 @@ from pyscaffold.identification import underscore
 
 from pyscaffoldext.django.extension import Django
 
-from .helpers import PYTHON, run
+from .helpers import PYTHON, merge_env, run
 
 FLAG = Django().flag
 PUTUP = shell.get_executable("putup")
@@ -73,8 +73,8 @@ def remove_eventual_package(name):
         run(f"{PIP} uninstall --yes {name}")
 
 
-RND_NAME1 = "pkg82b3f28b-2811-4126-99a7-c88b4eb3fbb9"
-RND_NAME2 = "pkg9402c0de-c719-41b6-83ad-35c477fcc517"
+RND_NAME1 = "pkg82b3f28b-2811"
+RND_NAME2 = "pkg9402c0de-c719"
 # ^  Fixed random values.
 #    If we use random values for parametrization pytest-xdist gets confused
 #    and returns an error.
@@ -98,15 +98,16 @@ def test_manage_py_runs_nicely(tmpfolder, name, command):
             print(list(glob("*")))
             print(list(Path("src").glob("*/*")))
             print(Path("manage.py").read_text())
-            run(f"{PIP} install -Ie .")  # required for `python -m`
+            env = merge_env(PYTHONPATH=str(Path("src").resolve()))
+            # ^  required for `python -m` to work, without installing the package
 
             # when we call manage.py or python -m djangotest
-            run(f"{command} migrate")
+            run(f"{command} migrate", env=env)
             # then it should create a sqlite3 file in the right place
             assert Path("db.sqlite3").exists()
             assert not Path("src/db.sqlite3").exists()
             # and everything should be fine
             for task in TASKS:
-                run(f"{command} {task}")
+                run(f"{command} {task}", env=env)
     finally:
         remove_eventual_package(name)

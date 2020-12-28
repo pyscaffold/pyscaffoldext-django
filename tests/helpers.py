@@ -3,6 +3,7 @@ import shlex
 import stat
 import sys
 import traceback
+from os import environ
 from pathlib import Path
 from shutil import rmtree
 from subprocess import STDOUT, CalledProcessError, check_output
@@ -51,6 +52,14 @@ def set_writable(func, path, _exc_info):
 
     # now it either works or re-raise the exception
     func(path)
+
+
+def merge_env(other=None, **kwargs):
+    """Create a dict from merging items to the current ``os.environ``"""
+    env = {k: v for k, v in environ.items()}  # Clone the environ as a dict
+    env.update(other or {})
+    env.update(kwargs)
+    return env
 
 
 def run(*args, **kwargs):
