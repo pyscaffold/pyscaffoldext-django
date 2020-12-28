@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 from pathlib import Path
 
@@ -111,6 +112,10 @@ def test_cli_without_django(tmpfolder):
         assert not Path(path).exists()
 
 
+@pytest.mark.skipif(
+    os.name == "nt",
+    reason="pytest is presenting problems to capture stderr/stdout on Windows",
+)
 def test_cli_with_django_and_update(tmpfolder, capfd):
     # Given a project exists
     create_project(project_path=PROJ_NAME, config_files=NO_CONFIG)
