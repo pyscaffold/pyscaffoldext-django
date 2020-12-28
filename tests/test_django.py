@@ -123,7 +123,7 @@ def test_cli_with_django_and_update(tmpfolder, capfd):
 
     # then a warning should be displayed
     out, err = capfd.readouterr()
-    assert all(
-        warn in out + err
-        for warn in ("external tools", "not supported", "will be ignored")
-    )
+    out_err = out + err
+    assert "external tools" in out_err
+    assert "not supported" in out_err
+    assert "will be ignored" in out_err
