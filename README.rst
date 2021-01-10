@@ -10,6 +10,9 @@
 .. image:: https://img.shields.io/pypi/v/pyscaffoldext-django.svg
     :alt: PyPI-Server
     :target: https://pypi.org/project/pyscaffoldext-django/
+.. image:: https://pepy.tech/badge/pyscaffoldext-django/month
+    :alt: Monthly Downloads
+    :target: https://pepy.tech/project/pyscaffoldext-django
 
 ====================
 pyscaffoldext-django
