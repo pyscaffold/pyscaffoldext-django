@@ -39,14 +39,14 @@ This extension can be directly installed with ``pip``:
 
 .. code-block:: bash
 
-    $ pip install pyscaffoldext-django
+    pip install pyscaffoldext-django
 
 Or, if you prefer ``pipx``:
 
 .. code-block:: shell
 
-   $ pipx install pyscaffold  # if you haven't installed pyscaffold yet
-   $ pipx inject pyscaffold pyscaffoldext-django
+    pipx install pyscaffold  # if you haven't installed pyscaffold yet
+    pipx inject pyscaffold pyscaffoldext-django
 
 Note that, after the installation, ``putup -h`` will show a new option
 ``--django``. Use this option to indicate when you are trying to create a
@@ -54,7 +54,7 @@ django app. For example:
 
 .. code-block:: shell
 
-   $ putup --django myapp
+    putup --django myapp
 
 Please refer to `django-admin`_ documentation for more details.
 
@@ -68,10 +68,10 @@ The following manual procedure can be used to replace ``pyscaffoldext-django``:
 
 .. code-block:: bash
 
-    $ django-admin startproject myapp
-    $ mkdir myapp/src
-    $ mv myapp/myapp myapp/src
-    $ mv myapp/manage.py myapp/src/myapp/__main__.py
+    django-admin startproject myapp
+    mkdir myapp/src
+    mv myapp/myapp myapp/src
+    mv myapp/manage.py myapp/src/myapp/__main__.py
 
     # edit the location of the database in myapp/src/myapp/setttings.py
     # to point to one directory up, similar to:
@@ -79,7 +79,7 @@ The following manual procedure can be used to replace ``pyscaffoldext-django``:
     #   PROJECT_DIR = os.path.dirname(BASE_DIR)
     #   DATABASES = {'default': { ..., 'NAME': os.path.join(PROJECT_DIR, 'db.sqlite3')}}
 
-    $ putup myapp --force
+    putup myapp --force
 
 We move/rename the ``manage.py`` file to ``myapp/src/myapp/__main__.py``. This
 makes it possible to manage the application using ``python -m myapp`` when
@@ -179,11 +179,11 @@ One example on how to use nested apps is:
 
 .. code-block:: bash
 
-    $ putup --django website
-    $ cd website
+    putup --django website
+    cd website
     # … do some coding
-    $ mkdir src/website/subapp
-    $ python manage.py startapp subapp src/website/subapp
+    mkdir src/website/subapp
+    python manage.py startapp subapp src/website/subapp
     # OR python -m website startapp subapp src/website/subapp
     #    if you have the package installed in the dev environment
     # … then you can add "website.subapp" to INSTALLED_APPS in src/website/settings.py
@@ -228,9 +228,9 @@ Making Changes & Contributing
 This project uses `pre-commit`_, please make sure to install it before making any
 changes::
 
-    $ pip install pre-commit
-    $ cd pyscaffoldext-django
-    $ pre-commit install
+    pip install pre-commit
+    cd pyscaffoldext-django
+    pre-commit install
 
 It is a good idea to update the hooks to the latest version::
 
