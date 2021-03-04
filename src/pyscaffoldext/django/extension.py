@@ -19,13 +19,13 @@ from pyscaffold.actions import Action, ActionParams, ScaffoldOpts, Structure
 from pyscaffold.extensions import Extension
 from pyscaffold.log import logger
 from pyscaffold.operations import add_permissions
-from pyscaffold.shell import ShellCommand
+from pyscaffold.shell import get_command
 from pyscaffold.structure import merge, reify_content, resolve_leaf
 from pyscaffold.templates import get_template
 
 from . import templates
 
-django_admin = ShellCommand("django-admin")
+django_admin = get_command("django-admin")
 template = partial(get_template, relative_to=templates)
 
 UPDATE_WARNING = (
