@@ -3,8 +3,16 @@ Changelog
 =========
 
 ..
-    Version 0.1.1 (development)
+    Version 0.1.2 (development)
     ===========================
+
+
+Version 0.1.1
+=============
+
+- Improved lookup for django-admin via ``pyscaffold.shell.get_command``, see issue #3
+- Fix invalid cache in Cirrus CI by using a fingerprint script
+
 
 Version 0.1
 ===========
