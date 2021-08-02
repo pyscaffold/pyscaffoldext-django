@@ -3,7 +3,7 @@
     :target: https://cirrus-ci.com/github/pyscaffold/pyscaffoldext-django
 .. image:: https://readthedocs.org/projects/pyscaffoldext-django/badge/?version=latest
     :alt: ReadTheDocs
-    :target: https://pyscaffoldext-django.readthedocs.io/
+    :target: https://pyscaffold.org/projects/django/en/latest/
 .. image:: https://img.shields.io/coveralls/github/pyscaffold/pyscaffoldext-django/master.svg
     :alt: Coveralls
     :target: https://coveralls.io/r/pyscaffold/pyscaffoldext-django
@@ -248,7 +248,7 @@ information on PyScaffold see https://pyscaffold.org/.
 .. _PyScaffold: https://pyscaffold.org
 .. _PyScaffold's documentation: https://pyscaffold.org/en/latest/dependencies.html
 .. _Django: https://www.djangoproject.com/
-.. _django-admin: https://docs.djangoproject.com/en/2.2/ref/django-admin/
+.. _django-admin: https://docs.djangoproject.com/en/3.2/ref/django-admin/
 .. _extension: https://pyscaffold.org/en/latest/extensions.html
 .. _virtual environment: https://docs.python.org/3/tutorial/venv.html
 .. _semver: https://semver.org
@@ -266,5 +266,5 @@ information on PyScaffold see https://pyscaffold.org/.
 .. _Django's guides: https://docs.djangoproject.com/en/3.0/intro/reusable-apps/
 .. _multiple apps: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/skeleton_website
 .. _src-based layout: https://blog.ionelmc.ro/2014/05/25/python-packaging/
-.. _pre-commit: http://pre-commit.com/
+.. _pre-commit: https://pre-commit.com/
 .. _contribution guidelines: https://pyscaffold.org/en/latest/contributing.html
