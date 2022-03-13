@@ -76,7 +76,7 @@ def create_django(struct: Structure, opts: ScaffoldOpts) -> ActionParams:
     project_path = Path(opts["project_path"])
     pkg_name = opts["package"]
     fs.create_directory(project_path, pretend=pretend)
-    django_admin("startproject", pkg_name, str(project_path), log=True, pretend=pretend)
+    django_admin("startproject", pkg_name, str(project_path), pretend=pretend)
 
     src_dir = project_path / "src"
     pkg_dir = src_dir / pkg_name
