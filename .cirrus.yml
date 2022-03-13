@@ -90,8 +90,6 @@ check_task:
 
 linux_task:
   matrix:
-    - name: test (Linux - 3.7)
-      container: {image: "python:3.7-bullseye"}
     - name: test (Linux - 3.8)
       container: {image: "python:3.8-bullseye"}
     - name: test (Linux - 3.9)
