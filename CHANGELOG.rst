@@ -3,8 +3,13 @@ Changelog
 =========
 
 ..
-    Version 0.1.2 (development)
+    Version 0.1.3 (development)
     ===========================
+
+Version 0.2
+===========
+
+- Updated to Django v4
 
 
 Version 0.1.1
