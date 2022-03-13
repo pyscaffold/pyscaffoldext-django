@@ -16,7 +16,7 @@ import os
 import sys
 
 # This makes the package usable even without being installed with pip
-# (redundant in the case the developer uses `python setup.py develop`)
+# (redundant in the case the developer uses `pip install -e .`)
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src"))
 
 
