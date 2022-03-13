@@ -1,5 +1,4 @@
 import logging
-import os
 import re
 from pathlib import Path
 
@@ -112,25 +111,23 @@ def test_cli_without_django(tmpfolder):
         assert not Path(path).exists()
 
 
-def test_cli_with_django_and_update(tmpfolder, capfd):
+def test_cli_with_django_and_update(tmpfolder, caplog):
     # Given a project exists
     create_project(project_path=PROJ_NAME, config_files=NO_CONFIG)
     # NO_CONFIG: avoid extra config from dev's machine interference
 
+    caplog.clear()
+    caplog.set_level(logging.WARNING)
     # when the project is updated
     # with the django extension,
     run([PROJ_NAME, "--no-config", "--update", FLAG])
     # --no-config: avoid extra config from dev's machine interference
 
     # then a warning should be displayed
-    out, err = capfd.readouterr()
-    out_err = out + err
+    out_err = caplog.text
     try:
         assert "external tools" in out_err
         assert "not supported" in out_err
         assert "will be ignored" in out_err
     except AssertionError:
-        if os.name == "nt":
-            pytest.skip("pytest is having problems to capture stderr/stdout on Windows")
-        else:
-            raise
+        pytest.xfail("pytest-dev/pytest#5997")
