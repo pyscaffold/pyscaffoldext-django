@@ -159,6 +159,9 @@ linkcheck_task:
   dist_cache: {folder: dist, fingerprint_script: echo $CIRRUS_BUILD_ID}  # download
   <<: *task-template
   install_script: pip install tox
+  install_binary_deps_script:
+    - apt update
+    - apt install -y python3-enchant
   linkcheck_script: tox --installpkg dist/*.whl -e linkcheck -- -q
 
 # publish_task:
