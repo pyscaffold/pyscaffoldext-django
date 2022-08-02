@@ -45,7 +45,7 @@ env:
   <<: *task-template
   dist_cache: {folder: dist, fingerprint_script: echo $CIRRUS_BUILD_ID}  # download
   test_script:
-    - tox --installpkg dist/*.whl -- -n 2 -rfEx --durations 10 --color yes
+    - tox --installpkg dist/*.whl -- -n auto -rfEx --durations 10 --color yes
   submit_coverage_script:
     - pipx run coverage xml -o coverage.xml
     - pipx run coveralls --submit coverage.xml
@@ -90,6 +90,8 @@ check_task:
 
 linux_task:
   matrix:
+    - name: test (Linux - 3.7)
+      container: {image: "python:3.7-bullseye"}
     - name: test (Linux - 3.8)
       container: {image: "python:3.8-bullseye"}
     - name: test (Linux - 3.9)
@@ -120,12 +122,15 @@ macos_task:
   <<: *test-template
 
 freebsd_task:
-  name: test (freebsd - 3.8)
-  freebsd_instance: {image_family: freebsd-13-0}
+  name: test (freebsd - 3.9)
+  freebsd_instance: {image_family: freebsd-13-1}
   install_script:
     - pkg remove -y python lang/python
-    - pkg install -y git python38 py38-pip py38-gdbm py38-sqlite3 py38-tox py38-pipx
-    - ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+    - pkg install -y git python39 py39-pip py39-gdbm py39-sqlite3 py39-tox # py39-pipx
+    - pip install -U pipx
+      # pipx in freebsd 2022Q3 is outdated/broken, so we obtain it with pip.
+      # Probably it is safe to `pkg install py39-pipx` directly after Oct/2022.
+    - ln -s /usr/local/bin/python3.9 /usr/local/bin/python
   <<: *test-template
 
 windows_task:
